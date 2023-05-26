@@ -16,12 +16,15 @@ const shopRoutes = require('./routes/shop');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+const sequelize = require('./util/database');
+
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
+
 app.use(errorController.get404);
 
-const sequelize = require('./util/database');
+
 
 sequelize.sync()
 .then(result  => {
