@@ -21,14 +21,4 @@ app.use(shopRoutes);
 
 app.use(errorController.get404);
 
-// const db = require('./util/database');
-// // db.execute('SELECT * FROM products');
-// db.execute('SELECT * FROM products')
-//   .then(([rows, fields]) => {
-//     console.log(rows);
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//   });
-
-app.listen(4000);
+app.listen(3000);
