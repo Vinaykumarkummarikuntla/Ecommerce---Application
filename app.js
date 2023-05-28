@@ -7,6 +7,9 @@ const errorController = require("./controllers/error");
 const sequelize = require("./util/database");
 const Product = require("./models/product");
 const User = require("./models/user");
+const Cart = require("./models/cart");
+const CartItem = require("./models/cart-item");
+
 
 const app = express();
 
@@ -36,7 +39,12 @@ app.use((req,res,next) =>{
 
 Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
 User.hasMany(Product);
+User.hasOne(Cart);
+// cart table referenec product id
+Cart.belongsTo(Product);
 
+Cart.belongsToMany(Product,{through : CartItem});
+Product.belongsToMany(Cart,{through :CartItem});
 
 
 app.use("/admin", adminRoutes);
@@ -45,8 +53,8 @@ app.use(shopRoutes);
 app.use(errorController.get404);
 
 sequelize
-// {force:true}
-  .sync()
+//.sync({force:true})
+.sync()
   .then((result) => {
     return User.findByPk(1);
   })
@@ -58,7 +66,12 @@ sequelize
   })
   .then((user) => {
     // console.log(user),
+    return user.createCart();
+    
+  })
+  .then((cart) => {
     app.listen(3000);
+    
   })
   .catch((err) => {
     console.log(err);
